@@ -6,4 +6,4 @@ text = url.text
 
 data = json.loads(text)
 
-print(data)
+print(data.keys())
