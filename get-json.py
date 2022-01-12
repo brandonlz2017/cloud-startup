@@ -25,9 +25,14 @@ df['CrimeCodeName'] = df['CrimeCode'].map(crime_name_dict)
 df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
 
 
-print(df.head())
+#print(df.head())
 
-philly_url = pd.read_csv('https://phl.carto.com/api/v2/sql?filename=incidents_part1_part2&amp;format=csv&amp;q=SELECT%20*%20,%20ST_Y(the_geom)%20AS%20lat,%20ST_X(the_geom)%20AS%20lng%20FROM%20incidents_part1_part2%20WHERE%20dispatch_date_time%20%3E=%20%272021-01-01%27%20AND%20dispatch_date_time%20%3C%20%272022-01-01%27')
-print(philly_url.head())
+philly_url = requests.get('https://opendata.arcgis.com/datasets/abe39f44c8af4bfb8bfb2ec7d233d920_0.geojson')
+philly_text = philly_url.text
+data_philly = json.loads(philly_text)
+data_philly = data_philly['features']
+
+
+print(data_philly[:5])
 
 
