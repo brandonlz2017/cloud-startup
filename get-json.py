@@ -6,14 +6,18 @@ text = url.text
 
 data = json.loads(text)
 data = data['features']
+columns = list(data[0]['properties'].keys())
 
 temp_array = []
 for row in range(len(data)):
-    row_working = data[row]['properties']
+    row_working = list(data[row]['properties'].values())
     temp_array.append(row_working)
 
-print(temp_array[:5)    
+df = pd.DataFrame(temp_array)
+df = df.drop([16], axis=1)
+df.columns = columns
+
+print(df.head())    
     
     
 
-#print(data['features'][0]['properties'])
