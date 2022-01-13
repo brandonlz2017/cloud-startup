@@ -28,6 +28,7 @@ df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
 #print(df.head())
 
 philly_url = requests.get('https://opendata.arcgis.com/datasets/abe39f44c8af4bfb8bfb2ec7d233d920_0.geojson')
+https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/INCIDENTS_PART1_PART2/FeatureServer/0/query?f=json&where=(DISPATCH_DATE_TIME%20%3E%3D%20TIMESTAMP%20'1-01-2015%208%3A48%3A53'%20AND%20DISPATCH_DATE_TIME%20%3C%3D%20TIMESTAMP%20'1-11-2022%201%3A15%3A00')&outFields=*
 philly_text = philly_url.text
 data_philly = json.loads(philly_text)
 data_philly = data_philly['features']
