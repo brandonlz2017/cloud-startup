@@ -10,6 +10,10 @@ text = url.text
 
 data = json.loads(text)
 data = data['features']
+
+print(data)
+
+"""
 columns = list(data[0]['properties'].keys())
 
 temp_array = []
@@ -35,6 +39,6 @@ data_philly = data_philly['features']
 
 
 print(data_philly[:5])
+"""
 
 
-"Hello"
