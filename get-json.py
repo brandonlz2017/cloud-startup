@@ -1,5 +1,6 @@
 import requests, json
 import pandas as pd, numpy as np
+from collections import Counter
 
 def special_parser(item):
     if item.isnumeric():
@@ -33,20 +34,34 @@ df.columns = columns
 df['CrimeCodeName'] = df['CrimeCode'].map(crime_name_dict)
 df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
 
+#print(df['CrimeCodeType'].unique())
+
+print(len(df))
+df = df[df['CrimeCodeType']=='VIOLENT']
+print(len(df))
+
 location_working = [address for address in list(df['Location']) if address]
 location_joined = ' '.join(location_working)
+location_joined = location_joined.upper()
 location_elements = location_joined.split()
 
-print(location_elements[:10])
+#print(location_elements[:10])
 
 parsed_st_names = []
 for street in location_elements:
     if street.isnumeric():
         pass
+    elif len(street) < 4:
+        pass
     else:
         parsed_st_names.append(street)
 
-print(parsed_st_names[:10])
+
+d_list = Counter(parsed_st_names)
+print(d_list.most_common(30))
+
+#print(len(np.unique(parsed_st_names)))
+
 
 
 
