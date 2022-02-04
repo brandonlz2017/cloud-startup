@@ -1,5 +1,13 @@
 import requests, json
-import pandas as pd
+import pandas as pd, numpy as np
+
+def special_parser(item):
+    if item.isnumeric():
+        pass
+    else:
+        return item
+
+
 
 url = requests.get('https://opendata.arcgis.com/datasets/3eeb0a2cbae94b3e8549a8193717a9e1_0.geojson')
 crime_codes = pd.read_csv('https://www.arcgis.com/sharing/rest/content/items/e6ca4eadecdc475a961f68bc314e2a86/data')
@@ -11,9 +19,6 @@ text = url.text
 data = json.loads(text)
 data = data['features']
 
-print(data)
-
-"""
 columns = list(data[0]['properties'].keys())
 
 temp_array = []
@@ -28,17 +33,32 @@ df.columns = columns
 df['CrimeCodeName'] = df['CrimeCode'].map(crime_name_dict)
 df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
 
+location_working = [address for address in list(df['Location']) if address]
+location_joined = ' '.join(location_working)
+location_elements = location_joined.split()
 
-#print(df.head())
+print(location_elements[:10])
 
-philly_url = requests.get('https://opendata.arcgis.com/datasets/abe39f44c8af4bfb8bfb2ec7d233d920_0.geojson')
-https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/INCIDENTS_PART1_PART2/FeatureServer/0/query?f=json&where=(DISPATCH_DATE_TIME%20%3E%3D%20TIMESTAMP%20'1-01-2015%208%3A48%3A53'%20AND%20DISPATCH_DATE_TIME%20%3C%3D%20TIMESTAMP%20'1-11-2022%201%3A15%3A00')&outFields=*
-philly_text = philly_url.text
-data_philly = json.loads(philly_text)
-data_philly = data_philly['features']
+parsed_st_names = []
+for street in location_elements:
+    if street.isnumeric():
+        pass
+    else:
+        parsed_st_names.append(street)
+
+print(parsed_st_names[:10])
 
 
-print(data_philly[:5])
-"""
 
+#df['Street Name'] = df['Location'].apply(lambda x: string_splitter(x))
+
+
+#print(len(df['Street Name'].unique()))
+
+#print(df['Street Name'].head())
+
+#print(len(df))
+#print(df['Location'].head())
+#print(df.head(5))
+#print(df.columns)
 
