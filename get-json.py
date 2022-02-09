@@ -14,6 +14,7 @@ url = requests.get('https://opendata.arcgis.com/datasets/3eeb0a2cbae94b3e8549a81
 crime_codes = pd.read_csv('https://www.arcgis.com/sharing/rest/content/items/e6ca4eadecdc475a961f68bc314e2a86/data')
 crime_name_dict = dict(zip(list(crime_codes['CODE']), list(crime_codes['NAME'])))
 crime_type_dict = dict(zip(list(crime_codes['CODE']), list(crime_codes['VIO_PROP_CFS'])))
+crime_name_long_dict = dict(zip(list(crime_codes['CODE']), list(crime_codes['VIOLENT_CR'])))
 
 text = url.text
 
@@ -33,32 +34,46 @@ df.columns = columns
 
 df['CrimeCodeName'] = df['CrimeCode'].map(crime_name_dict)
 df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
+df['CrimeCodeNameLong'] = df['CrimeCode'].map(crime_name_long_dict)
 
-#print(df['CrimeCodeType'].unique())
+#print(df.iloc[0,:])
+
+#print(df['Description'].unique())
 
 print(len(df))
-df = df[df['CrimeCodeType']=='VIOLENT']
-print(len(df))
+
+frequent_address = Counter(list(df['Location']))
+print(frequent_address.most_common(30))
+
+
+#df = df[df['CrimeCodeName']=='MURDER']
+df_working =  df[df['Location']=='1500 RUSSELL ST']
+print(df_working['Description'].unique())
+
+#print(list(df['CrimeCodeNameLong'].unique()))
+
+#print(df.head())
+
 
 location_working = [address for address in list(df['Location']) if address]
-location_joined = ' '.join(location_working)
-location_joined = location_joined.upper()
-location_elements = location_joined.split()
+#location_joined = ' '.join(location_working)
+#location_joined = location_joined.upper()
+#location_elements = location_joined.split()
 
-#print(location_elements[:10])
+#print(location_working)
 
-parsed_st_names = []
-for street in location_elements:
-    if street.isnumeric():
-        pass
-    elif len(street) < 4:
-        pass
-    else:
-        parsed_st_names.append(street)
+#parsed_st_names = []
+#for street in location_elements:
+   # if street.isnumeric():
+       #pass
+    #elif len(street) < 4:
+       #pass
+    #else:
+       #parsed_st_names.append(street)
 
 
-d_list = Counter(parsed_st_names)
-print(d_list.most_common(30))
+#d_list = Counter(parsed_st_names)
+#print(d_list.most_common(30))
 
 #print(len(np.unique(parsed_st_names)))
 
