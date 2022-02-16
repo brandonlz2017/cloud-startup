@@ -1,5 +1,6 @@
 import requests, json
 import pandas as pd, numpy as np
+import datetime
 from collections import Counter
 
 def special_parser(item):
@@ -30,25 +31,59 @@ for row in range(len(data)):
 
 df = pd.DataFrame(temp_array)
 df = df.drop([16], axis=1)
+#df = df.dropna(subset=['CrimeDateTime'])
 df.columns = columns
+
+
+#print(columns)
+df = df.sort_values(by='CrimeDateTime')
+df = df.reset_index(drop=True)
+
+df['CrimeDateTime'] = pd.to_datetime(df['CrimeDateTime'])
+df = df.dropna(subset=['CrimeDateTime'])
+df['Year'] = df['CrimeDateTime'].apply(lambda x: int(x.year))
+
+#print(df.iloc[0,:])
+#print(len(df))
+
+#counted_list = Counter(list(df['Neighborhood']))
+#print(counted_list.most_common(15))
+
+
+#print(df['CrimeDateTime'].head())
+#print(df['CrimeDateTime'][0])
+#print(df['CrimeDateTime'][0].year)
+
 
 df['CrimeCodeName'] = df['CrimeCode'].map(crime_name_dict)
 df['CrimeCodeType'] = df['CrimeCode'].map(crime_type_dict)
 df['CrimeCodeNameLong'] = df['CrimeCode'].map(crime_name_long_dict)
 
+print(df['CrimeCodeType'].unique())
+
 #print(df.iloc[0,:])
 
 #print(df['Description'].unique())
 
-print(len(df))
+#print(len(df))
 
-frequent_address = Counter(list(df['Location']))
-print(frequent_address.most_common(30))
+#frequent_address = Counter(list(df['Location']))
+#print(frequent_address.most_common(30))
 
 
-#df = df[df['CrimeCodeName']=='MURDER']
-df_working =  df[df['Location']=='1500 RUSSELL ST']
-print(df_working['Description'].unique())
+df = df[df['CrimeCodeType']=='VIOLENT']
+
+frequent_hood = Counter(list(df['Neighborhood']))
+print(frequent_hood.most_common(15))
+
+frequent_yoy = Counter(list(df['Year']))
+print(frequent_yoy.most_common())
+
+
+
+
+#df_working =  df[df['Location']=='1500 RUSSELL ST']
+#print(df_working['Description'].unique())
 
 #print(list(df['CrimeCodeNameLong'].unique()))
 
